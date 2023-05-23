@@ -6,6 +6,8 @@ function App() {
   const [message, setMessage] = useState([]);
   const [text, setText] = useState([]);
   const [email, setEmail] = useState([]);
+  const [fb, setFb] = useState([]);
+  const [viewed, setViewed] = useState([]);
 
   const handleSubmit = () => {
     fetch(
@@ -32,6 +34,32 @@ function App() {
   useEffect(() => {
     console.log(email);
   }, [email]);
+
+  const handleFb = () => {
+    fetch(
+      `https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=FNMNdzW9bQ5hrxY2gZkjAxtFGQ1G52t5`
+    )
+      .then((response) => response.json())
+      .then((data) => setFb(data.results))
+      .catch((error) => console.log("Error: ", error));
+  };
+
+  useEffect(() => {
+    console.log(fb);
+  }, [fb]);
+
+  const handleView = () => {
+    fetch(
+      `//https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=FNMNdzW9bQ5hrxY2gZkjAxtFGQ1G52t5`
+    )
+      .then((response) => response.json())
+      .then((data) => setViewed(data.results))
+      .catch((error) => console.log("Error: ", error));
+  };
+
+  useEffect(() => {
+    console.log(viewed);
+  }, [viewed]);
 
   return (
     <div>
@@ -71,37 +99,87 @@ function App() {
             <button class="fa fa-search" type="submit" onClick={handleEmail}>
               Get most emailed articles for the last day!
             </button>
-            {/* <button class="fa fa-search" type="submit" onClick={handleSubmit}>
+            <button class="fa fa-search" type="submit" onClick={handleFb}>
               Get most shared articles on Facebook for the last day:
             </button>
-            <button class="fa fa-search" type="submit" onClick={handleSubmit}>
+            <button class="fa fa-search" type="submit" onClick={handleView}>
               Get most viewed articles for the last seven days:
-            </button> */}
+            </button>
           </div>
         </header>
         {email.length === 0 ? (
           <p></p>
         ) : (
-          <div>
+          <div className="tablebox">
             <table>
               <tr>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Read</th>
               </tr>
               {email.map((item, index) => (
                 <tr key={index}>
                   <td>{item.title}</td>
                   <td>{item.abstract}</td>
                   <td>
-                    <a href={item.url}> Click to read </a>
+                    <a href={item.url}> Click here </a>
                   </td>
                 </tr>
               ))}
             </table>
           </div>
         )}
+        <div>
+          {fb.length === 0 ? (
+            <p></p>
+          ) : (
+            <div className="tablebox">
+              <table>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Read</th>
+                </tr>
+                {email.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.title}</td>
+                    <td>{item.abstract}</td>
+                    <td>
+                      <a href={item.url}> Click here </a>
+                    </td>
+                  </tr>
+                ))}
+              </table>
+            </div>
+          )}
+        </div>
+        <div>
+          {viewed.length === 0 ? (
+            <p></p>
+          ) : (
+            <div className="tablebox">
+              <table>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Read</th>
+                </tr>
+                {email.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.title}</td>
+                    <td>{item.abstract}</td>
+                    <td>
+                      <a href={item.url}> Click here </a>
+                    </td>
+                  </tr>
+                ))}
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 export default App;
+
